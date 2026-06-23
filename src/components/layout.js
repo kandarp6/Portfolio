@@ -32,8 +32,9 @@ const Layout = ({ children, location }) => {
       return;
     }
 
-    if (location.hash) {
-      const id = location.hash.substring(1); // location.hash without the '#'
+    const hasHash = window.location.hash;
+    if (hasHash) {
+      const id = hasHash.substring(1); // location.hash without the '#'
       setTimeout(() => {
         const el = document.getElementById(id);
         if (el) {
@@ -41,6 +42,8 @@ const Layout = ({ children, location }) => {
           el.focus();
         }
       }, 0);
+    } else {
+      window.scrollTo(0, 0);
     }
 
     handleExternalLinks();
@@ -51,6 +54,16 @@ const Layout = ({ children, location }) => {
       window.history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
+
+    // On page reload, clear the hash to prevent auto-scrolling to the last viewed section
+    try {
+      const navigation = window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType('navigation')[0];
+      if (navigation && navigation.type === 'reload' && window.location.hash) {
+        window.history.replaceState(null, null, window.location.pathname);
+      }
+    } catch (e) {
+      console.error('Error clearing hash on reload:', e);
+    }
 
     const updateMouseCoords = e => {
       document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
