@@ -482,9 +482,7 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
         const smaaPass = new EffectPass(
           this.camera,
           new SMAAEffect({
-            preset: SMAAPreset.MEDIUM,
-            searchImage: SMAAEffect.searchImageDataURL,
-            areaImage: SMAAEffect.areaImageDataURL
+            preset: SMAAPreset.MEDIUM
           })
         );
         this.renderPass.renderToScreen = false;
@@ -496,28 +494,7 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
       }
 
       loadAssets() {
-        const assets = this.assets;
-        return new Promise(resolve => {
-          const manager = new THREE.LoadingManager(resolve);
-
-          const searchImage = new Image();
-          const areaImage = new Image();
-          assets.smaa = {};
-          searchImage.addEventListener('load', function () {
-            assets.smaa.search = this;
-            manager.itemEnd('smaa-search');
-          });
-
-          areaImage.addEventListener('load', function () {
-            assets.smaa.area = this;
-            manager.itemEnd('smaa-area');
-          });
-          manager.itemStart('smaa-search');
-          manager.itemStart('smaa-area');
-
-          searchImage.src = SMAAEffect.searchImageDataURL;
-          areaImage.src = SMAAEffect.areaImageDataURL;
-        });
+        return Promise.resolve();
       }
 
       init() {
