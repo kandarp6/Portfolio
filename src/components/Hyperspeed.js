@@ -428,6 +428,9 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
         if (container.offsetWidth > 0 && container.offsetHeight > 0) {
           this.hasValidSize = true;
         }
+
+        this.resizeObserver = new ResizeObserver(() => this.onWindowResize());
+        this.resizeObserver.observe(container);
       }
 
       onWindowResize() {
@@ -600,6 +603,9 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
           this.composer.dispose();
         }
 
+        if (this.resizeObserver) {
+          this.resizeObserver.disconnect();
+        }
         window.removeEventListener('resize', this.onWindowResize);
         if (this.container) {
           this.container.removeEventListener('mousedown', this.onMouseDown);
