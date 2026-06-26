@@ -369,7 +369,7 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
         });
         this.renderer.setSize(initW, initH, false);
         this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.composer = new EffectComposer(this.renderer);
+        this.composer = new EffectComposer(this.renderer, { multisampling: 0 });
         container.append(this.renderer.domElement);
 
         this.camera = new THREE.PerspectiveCamera(options.fov, initW / initH, 0.1, 10000);
@@ -451,27 +451,21 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
 
       initPasses() {
         this.renderPass = new RenderPass(this.scene, this.camera);
-        this.bloomPass = new EffectPass(
+        this.effectPass = new EffectPass(
           this.camera,
           new BloomEffect({
             luminanceThreshold: 0.2,
             luminanceSmoothing: 0,
             resolutionScale: 1
-          })
-        );
-
-        const smaaPass = new EffectPass(
-          this.camera,
+          }),
           new SMAAEffect({
             preset: SMAAPreset.MEDIUM
           })
         );
         this.renderPass.renderToScreen = false;
-        this.bloomPass.renderToScreen = false;
-        smaaPass.renderToScreen = true;
+        this.effectPass.renderToScreen = true;
         this.composer.addPass(this.renderPass);
-        this.composer.addPass(this.bloomPass);
-        this.composer.addPass(smaaPass);
+        this.composer.addPass(this.effectPass);
       }
 
       loadAssets() {
