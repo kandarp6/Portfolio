@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { srConfig } from '@config';
+import { srConfig, githubStats } from '@config';
+const githubUsername = 'kandarp6';
 import sr from '@utils/sr';
 import { usePrefersReducedMotion } from '@hooks';
 import { Icon } from '@components/icons';
@@ -10,14 +11,31 @@ const StyledGithubSection = styled.section`
 `;
 
 const StyledGithubWidget = styled.div`
-  background-color: var(--light-navy);
-  border: 1px solid var(--lightest-navy);
+  background-color: rgba(10, 10, 12, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: var(--border-radius);
   padding: 30px;
   margin-top: 30px;
   display: flex;
   flex-direction: column;
   gap: 25px;
+  transition: var(--transition);
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px -10px rgba(255, 255, 255, 0.08);
+  }
 
   .header {
     display: flex;
@@ -44,6 +62,10 @@ const StyledStatsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 15px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
   
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
@@ -73,6 +95,7 @@ const StyledStatsGrid = styled.div`
 const StyledContributionWrapper = styled.div`
   overflow-x: auto;
   padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
   
   /* Custom scrollbar for horizontal overflow */
   scrollbar-width: thin;
@@ -105,14 +128,14 @@ const StyledContributionGrid = styled.div`
     width: 10px;
     height: 10px;
     border-radius: 2px;
-    background-color: var(--dark-navy);
+    background-color: #111115;
     transition: background-color 0.2s ease;
     
-    &.level-0 { background-color: #1e293b; }
-    &.level-1 { background-color: rgba(6, 182, 212, 0.2); }
-    &.level-2 { background-color: rgba(6, 182, 212, 0.4); }
-    &.level-3 { background-color: rgba(6, 182, 212, 0.7); }
-    &.level-4 { background-color: rgba(6, 182, 212, 1); }
+    &.level-0 { background-color: #111115; }
+    &.level-1 { background-color: rgba(255, 255, 255, 0.15); }
+    &.level-2 { background-color: rgba(255, 255, 255, 0.35); }
+    &.level-3 { background-color: rgba(255, 255, 255, 0.65); }
+    &.level-4 { background-color: rgba(255, 255, 255, 1); }
   }
 `;
 
@@ -121,9 +144,9 @@ const Github = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
   const [gridData, setGridData] = useState([]);
   const [stats, setStats] = useState({
-    totalContributions: 0,
-    longestStreak: 0,
-    reposCount: 0,
+    totalContributions: githubStats?.useManual ? githubStats.totalContributions : null,
+    longestStreak: githubStats?.useManual ? githubStats.longestStreak : null,
+    reposCount: githubStats?.useManual ? githubStats.reposCount : null,
   });
 
   useEffect(() => {
@@ -135,19 +158,26 @@ const Github = () => {
 
   useEffect(() => {
     // 1. Fetch real contributions from the jogruber public proxy
-    fetch('https://github-contributions-api.jogruber.de/v4/kandarp6')
+    fetch(`https://github-contributions-api.jogruber.de/v4/${githubUsername}`)
       .then(response => response.json())
       .then(data => {
         const contributions = data.contributions;
         if (!contributions || contributions.length === 0) return;
 
+        // Sort chronologically ascending (oldest first)
+        contributions.sort((a, b) => a.date.localeCompare(b.date));
+
+        // Filter out future contributions to align and show proper past working days
+        const todayStr = new Date().toLocaleDateString('sv-SE');
+        const pastContributions = contributions.filter(day => day.date <= todayStr);
+
         // Calculate total contributions
         const totalCon = data.total ? Object.values(data.total).reduce((a, b) => a + b, 0) : 0;
 
-        // Calculate longest streak of days with count > 0
+        // Calculate longest streak of days with count > 0 using actual historical data
         let currentStreak = 0;
         let longestStreak = 0;
-        contributions.forEach(day => {
+        pastContributions.forEach(day => {
           if (day.count > 0) {
             currentStreak++;
             if (currentStreak > longestStreak) {
@@ -158,24 +188,43 @@ const Github = () => {
           }
         });
 
-        // Slice contributions to standard 52 weeks (364 days) and group into columns of 7
+        // Slice contributions to standard 52 weeks (364 days) ending today, aligned timezone-safely on a Sunday
+        let startIndex = pastContributions.length - 364;
+        if (startIndex < 0) startIndex = 0;
+
+        const getDayOfWeek = (dateStr) => {
+          const [y, m, d] = dateStr.split('-').map(Number);
+          return new Date(y, m - 1, d).getDay();
+        };
+
+        while (startIndex > 0 && getDayOfWeek(pastContributions[startIndex].date) !== 0) {
+          startIndex--;
+        }
+
+        const recentCon = pastContributions.slice(startIndex);
+
+        // Group into columns of 7 elements (Sunday to Saturday)
         const cols = [];
         let tempCol = [];
-        const recentCon = contributions.slice(-364);
         recentCon.forEach((day, index) => {
           tempCol.push(day.level);
           if (tempCol.length === 7 || index === recentCon.length - 1) {
+            while (tempCol.length < 7) {
+              tempCol.push(0); // Pad short columns
+            }
             cols.push(tempCol);
             tempCol = [];
           }
         });
 
         setGridData(cols);
-        setStats(prev => ({
-          ...prev,
-          totalContributions: totalCon,
-          longestStreak: longestStreak,
-        }));
+        if (!githubStats?.useManual) {
+          setStats(prev => ({
+            ...prev,
+            totalContributions: totalCon,
+            longestStreak: longestStreak,
+          }));
+        }
       })
       .catch(err => {
         console.error('Error fetching contributions:', err);
@@ -193,17 +242,19 @@ const Github = () => {
       });
 
     // 2. Fetch repo stats from official GitHub REST API
-    fetch('https://api.github.com/users/kandarp6')
-      .then(response => response.json())
-      .then(data => {
-        if (data.public_repos !== undefined) {
-          setStats(prev => ({
-            ...prev,
-            reposCount: data.public_repos,
-          }));
-        }
-      })
-      .catch(err => console.error('Error fetching github profile:', err));
+    if (!githubStats?.useManual) {
+      fetch(`https://api.github.com/users/${githubUsername}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.public_repos !== undefined) {
+            setStats(prev => ({
+              ...prev,
+              reposCount: data.public_repos,
+            }));
+          }
+        })
+        .catch(err => console.error('Error fetching github profile:', err));
+    }
   }, []);
 
   return (
@@ -216,24 +267,24 @@ const Github = () => {
 
       <StyledGithubWidget>
         <div className="header">
-          <a href="https://github.com/kandarp6" target="_blank" rel="noreferrer">
+          <a href={`https://github.com/${githubUsername}`} target="_blank" rel="noreferrer">
             <Icon name="GitHub" />
-            <span>github.com/kandarp6</span>
+            <span>github.com/{githubUsername}</span>
           </a>
         </div>
 
         <StyledStatsGrid>
           <div className="stat-card">
             <div className="label">Total Contributions</div>
-            <div className="val">{stats.totalContributions ? stats.totalContributions.toLocaleString() : '...'}</div>
+            <div className="val">{stats.totalContributions !== null ? stats.totalContributions.toLocaleString() : '...'}</div>
           </div>
           <div className="stat-card">
             <div className="label">Longest Streak</div>
-            <div className="val">{stats.longestStreak ? `${stats.longestStreak} days` : '...'}</div>
+            <div className="val">{stats.longestStreak !== null ? `${stats.longestStreak} days` : '...'}</div>
           </div>
           <div className="stat-card">
             <div className="label">Repositories</div>
-            <div className="val">{stats.reposCount ? `${stats.reposCount} active` : '...'}</div>
+            <div className="val">{stats.reposCount !== null ? `${stats.reposCount} active` : '...'}</div>
           </div>
         </StyledStatsGrid>
 

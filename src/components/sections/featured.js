@@ -152,22 +152,32 @@ const StyledProject = styled.li`
   }
 
   .project-description {
-    ${({ theme }) => theme.mixins.boxShadow};
     position: relative;
     z-index: 2;
     padding: 25px;
     border-radius: var(--border-radius);
-    background-color: var(--light-navy);
+    background-color: rgba(10, 10, 12, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     color: var(--light-slate);
     font-size: var(--fz-lg);
+    transition: var(--transition);
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px -10px rgba(255, 255, 255, 0.08);
+    }
 
     @media (max-width: 768px) {
       padding: 20px 0;
       background-color: transparent;
+      backdrop-filter: none;
+      border: none;
       box-shadow: none;
 
       &:hover {
         box-shadow: none;
+        border: none;
       }
     }
 

@@ -22,11 +22,15 @@ module.exports = {
       url: '/#about',
     },
     {
+      name: 'Skills',
+      url: '/#skills',
+    },
+    {
       name: 'Experience',
       url: '/#jobs',
     },
     {
-      name: 'Work',
+      name: 'Projects',
       url: '/#projects',
     },
     {
@@ -36,9 +40,16 @@ module.exports = {
   ],
 
   colors: {
-    green: '#06b6d4', // Premium cyan accent
-    navy: '#0b0f19',  // Dark obsidian grey
-    darkNavy: '#030712', // Obsidian black
+    green: '#ffffff',
+    navy: '#000000',
+    darkNavy: '#030303',
+  },
+
+  githubStats: {
+    useManual: true, // Set to true to use manual stats below instead of fetching from API
+    totalContributions: 76,
+    longestStreak: 12,
+    reposCount: 8,
   },
 
   srConfig: (delay = 200, viewFactor = 0.25) => ({

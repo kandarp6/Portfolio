@@ -8,7 +8,7 @@ import sr from '@utils/sr';
 import { usePrefersReducedMotion } from '@hooks';
 
 const StyledJobsSection = styled.section`
-  max-width: 700px;
+  max-width: 900px;
 
   .inner {
     display: flex;
@@ -34,35 +34,11 @@ const StyledTabList = styled.div`
 
   @media (max-width: 600px) {
     display: flex;
-    overflow-x: auto;
-    width: calc(100% + 100px);
-    padding-left: 50px;
-    margin-left: -50px;
-    margin-bottom: 30px;
-  }
-  @media (max-width: 480px) {
-    width: calc(100% + 50px);
-    padding-left: 25px;
-    margin-left: -25px;
-  }
-
-  li {
-    &:first-of-type {
-      @media (max-width: 600px) {
-        margin-left: 50px;
-      }
-      @media (max-width: 480px) {
-        margin-left: 25px;
-      }
-    }
-    &:last-of-type {
-      @media (max-width: 600px) {
-        padding-right: 50px;
-      }
-      @media (max-width: 480px) {
-        padding-right: 25px;
-      }
-    }
+    flex-direction: column;
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0;
+    margin-bottom: 25px;
   }
 `;
 
@@ -85,12 +61,11 @@ const StyledTabButton = styled.button`
     padding: 0 15px 2px;
   }
   @media (max-width: 600px) {
-    ${({ theme }) => theme.mixins.flexCenter};
-    min-width: 120px;
-    padding: 0 15px;
-    border-left: 0;
-    border-bottom: 2px solid var(--lightest-navy);
-    text-align: center;
+    padding: 0 15px 2px;
+    border-left: 2px solid var(--lightest-navy);
+    border-bottom: 0 !important;
+    text-align: left;
+    justify-content: flex-start;
   }
 
   &:hover,
@@ -111,19 +86,6 @@ const StyledHighlight = styled.div`
   transform: translateY(calc(${({ activeTabId }) => activeTabId} * var(--tab-height)));
   transition: transform 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
   transition-delay: 0.1s;
-
-  @media (max-width: 600px) {
-    top: auto;
-    bottom: 0;
-    width: 100%;
-    max-width: var(--tab-width);
-    height: 2px;
-    margin-left: 50px;
-    transform: translateX(calc(${({ activeTabId }) => activeTabId} * var(--tab-width)));
-  }
-  @media (max-width: 480px) {
-    margin-left: 25px;
-  }
 `;
 
 const StyledTabPanels = styled.div`
@@ -153,6 +115,19 @@ const StyledTabPanel = styled.div`
 
     .company {
       color: var(--green);
+    }
+
+    @media (max-width: 600px) {
+      .company {
+        display: block;
+        margin-top: 5px;
+      }
+      .company .separator {
+        display: none;
+      }
+      .company::before {
+        content: '@ ';
+      }
     }
   }
 
@@ -287,7 +262,7 @@ const Jobs = () => {
                     <h3>
                       <span>{title}</span>
                       <span className="company">
-                        &nbsp;@&nbsp;
+                        <span className="separator">&nbsp;@&nbsp;</span>
                         <a href={url} className="inline-link">
                           {company}
                         </a>

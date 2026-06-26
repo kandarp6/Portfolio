@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
-import { Head, Loader, Nav, Social, Email, Footer } from '@components';
+import { Head, Loader, Nav, Social, Email, Footer, Background, TargetCursor } from '@components';
 import { GlobalStyle, theme } from '@styles';
 
 const StyledContent = styled.div`
@@ -64,15 +64,6 @@ const Layout = ({ children, location }) => {
     } catch (e) {
       console.error('Error clearing hash on reload:', e);
     }
-
-    const updateMouseCoords = e => {
-      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
-      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
-    };
-    window.addEventListener('mousemove', updateMouseCoords);
-    return () => {
-      window.removeEventListener('mousemove', updateMouseCoords);
-    };
   }, []);
 
   return (
@@ -82,6 +73,13 @@ const Layout = ({ children, location }) => {
       <div id="root">
         <ThemeProvider theme={theme}>
           <GlobalStyle />
+          <Background />
+          <TargetCursor 
+            spinDuration={2}
+            hideDefaultCursor={true}
+            parallaxOn={true}
+            targetSelector="a, button, [role='button']"
+          />
 
           <a className="skip-to-content" href="#content">
             Skip to Content

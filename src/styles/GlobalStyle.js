@@ -21,8 +21,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ::selection {
-    background-color: var(--lightest-navy);
-    color: var(--lightest-slate);
+    background-color: var(--green-tint);
+    color: var(--green);
   }
 
   /* Provide basic, default focus styles.*/
@@ -53,17 +53,17 @@ const GlobalStyle = createGlobalStyle`
   /* Scrollbar Styles */
   html {
     scrollbar-width: thin;
-    scrollbar-color: var(--dark-slate) var(--navy);
+    scrollbar-color: var(--lightest-navy) var(--navy);
   }
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
     background: var(--navy);
   }
   ::-webkit-scrollbar-thumb {
-    background-color: var(--dark-slate);
-    border: 3px solid var(--navy);
+    background-color: var(--lightest-navy);
+    border: 2px solid var(--navy);
     border-radius: 10px;
   }
 
@@ -79,22 +79,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: var(--font-sans);
     font-size: var(--fz-xl);
     line-height: 1.3;
-
-    &::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      background: radial-gradient(
-        500px at var(--mouse-x, 0px) var(--mouse-y, 0px),
-        rgba(6, 182, 212, 0.06),
-        transparent 85%
-      );
-    }
 
     @media (max-width: 480px) {
       font-size: var(--fz-lg);
@@ -197,49 +181,27 @@ const GlobalStyle = createGlobalStyle`
 
   .numbered-heading {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     position: relative;
-    margin: 10px 0 40px;
+    margin: 10px auto 40px;
     width: 100%;
     font-size: clamp(26px, 5vw, var(--fz-heading));
     white-space: nowrap;
+    text-align: center;
 
     &:before {
-      position: relative;
-      bottom: 4px;
-      counter-increment: section;
-      content: '0' counter(section) '.';
-      margin-right: 10px;
-      color: var(--green);
-      font-family: var(--font-mono);
-      font-size: clamp(var(--fz-md), 3vw, var(--fz-xl));
-      font-weight: 400;
-
-      @media (max-width: 480px) {
-        margin-bottom: -3px;
-        margin-right: 5px;
-      }
+      display: none;
     }
 
     &:after {
       content: '';
       display: block;
-      position: relative;
-      top: -5px;
-      width: 300px;
-      height: 1px;
-      margin-left: 20px;
-      background-color: var(--lightest-navy);
-
-      @media (max-width: 1080px) {
-        width: 200px;
-      }
-      @media (max-width: 768px) {
-        width: 100%;
-      }
-      @media (max-width: 600px) {
-        margin-left: 10px;
-      }
+      width: 80px;
+      height: 2px;
+      margin: 12px auto 0;
+      background-color: var(--green);
     }
   }
 

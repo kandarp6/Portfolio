@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { StaticImage } from 'gatsby-plugin-image';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { srConfig } from '@config';
 import sr from '@utils/sr';
 import { usePrefersReducedMotion } from '@hooks';
+
 
 const StyledAboutSection = styled.section`
   max-width: 900px;
@@ -24,85 +25,6 @@ const StyledText = styled.div`
   }
 `;
 
-const StyledSkillsContainer = styled.div`
-  margin-top: 30px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-  }
-
-  .skill-card {
-    background-color: var(--light-navy);
-    border: 1px solid var(--lightest-navy);
-    border-radius: var(--border-radius);
-    padding: 18px;
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    @media (min-width: 601px) {
-      &:last-child {
-        grid-column: span 2;
-      }
-    }
-
-    &:hover {
-      border-color: var(--green);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px -15px var(--navy-shadow), 0 0 15px var(--green-tint);
-      
-      .skill-label {
-        color: var(--green);
-      }
-    }
-  }
-
-  .skill-label {
-    font-family: var(--font-mono);
-    font-size: var(--fz-xs);
-    color: var(--lightest-slate);
-    font-weight: 600;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    &:before {
-      content: '▹';
-      color: var(--green);
-      font-size: var(--fz-sm);
-    }
-  }
-  
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .skill-chip {
-    font-family: var(--font-mono);
-    font-size: var(--fz-xxs);
-    padding: 4px 10px;
-    border-radius: var(--border-radius);
-    background-color: var(--navy);
-    border: 1px solid var(--lightest-navy);
-    color: var(--slate);
-    transition: var(--transition);
-    cursor: default;
-
-    &:hover {
-      border-color: var(--green);
-      color: var(--green);
-      background-color: var(--green-tint);
-      transform: translateY(-2px);
-    }
-  }
-`;
 
 const StyledPic = styled.div`
   position: relative;
@@ -114,20 +36,23 @@ const StyledPic = styled.div`
   }
 
   .wrapper {
-    ${({ theme }) => theme.mixins.boxShadow};
     display: block;
     position: relative;
     width: 100%;
     border-radius: var(--border-radius);
     background-color: var(--green);
+    box-shadow: 0 10px 30px -15px var(--navy-shadow);
+    transition: var(--transition);
 
     &:hover,
     &:focus {
       outline: 0;
       transform: translate(-4px, -4px);
+      box-shadow: 0 20px 40px -15px rgba(255, 255, 255, 0.15);
 
       &:after {
-        transform: translate(8px, 8px);
+        transform: translate(6px, 6px);
+        border-color: rgba(255, 255, 255, 0.4);
       }
 
       .img {
@@ -183,28 +108,6 @@ const About = () => {
     sr.reveal(revealContainer.current, srConfig());
   }, []);
 
-  const skillCategories = [
-    {
-      category: 'Languages',
-      skills: ['Python', 'Java', 'JavaScript', 'C', 'C++']
-    },
-    {
-      category: 'Frontend',
-      skills: ['React.js', 'Next.js', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap']
-    },
-    {
-      category: 'Backend & DB',
-      skills: ['Node.js', 'Express.js', 'REST APIs', 'MongoDB', 'PostgreSQL', 'Supabase', 'Firebase']
-    },
-    {
-      category: 'AI & Data',
-      skills: ['Machine Learning', 'NLP', 'Data Analytics', 'Data Visualization', 'Scikit-learn', 'TensorFlow', 'TF-IDF']
-    },
-    {
-      category: 'Tools',
-      skills: ['Git', 'GitHub', 'Postman', 'VS Code', 'Vercel', 'Render']
-    }
-  ];
 
   return (
     <StyledAboutSection id="about" ref={revealContainer}>
@@ -219,7 +122,7 @@ const About = () => {
 
             <p>
               Currently, I am working as a <strong>Data Analytics &amp; Data Science Intern</strong> at{' '}
-              <a href="https://graphura.com" target="_blank" rel="noreferrer">Graphura India Private Limited</a>, where I work with real-world datasets, predictive analytics, and AI-driven solutions.
+              <a href="https://graphura.in" target="_blank" rel="noreferrer">Graphura India Private Limited</a>, where I work with real-world datasets, predictive analytics, and AI-driven solutions.
             </p>
 
             <p>
@@ -230,21 +133,7 @@ const About = () => {
               I enjoy solving real-world problems through technology and continuously expanding my knowledge in AI, Machine Learning, Data Science, and modern web development.
             </p>
 
-            <p>Here are some of the technologies and areas I’ve been working with:</p>
           </div>
-
-          <StyledSkillsContainer>
-            {skillCategories.map((cat, i) => (
-              <div key={i} className="skill-card">
-                <span className="skill-label">{cat.category}</span>
-                <div className="chips">
-                  {cat.skills.map((skill, j) => (
-                    <span key={j} className="skill-chip">{skill}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </StyledSkillsContainer>
         </StyledText>
 
         <StyledPic>

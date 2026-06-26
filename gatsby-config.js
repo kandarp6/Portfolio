@@ -1,4 +1,14 @@
+// Disable global fetch in Gatsby's Node process to prevent the 'source-map' library 
+// from misidentifying the environment as a browser and failing on lib/mappings.wasm.
+if (typeof globalThis !== 'undefined' && globalThis.fetch) {
+  delete globalThis.fetch;
+}
+if (typeof global !== 'undefined' && global.fetch) {
+  delete global.fetch;
+}
+
 const config = require('./src/config');
+
 
 module.exports = {
   siteMetadata: {

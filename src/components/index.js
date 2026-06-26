@@ -9,6 +9,7 @@ export { default as Email } from './email';
 export { default as Footer } from './footer';
 export { default as Hero } from './sections/hero';
 export { default as About } from './sections/about';
+export { default as Skills } from './sections/skills';
 export { default as Jobs } from './sections/jobs';
 export { default as Featured } from './sections/featured';
 export { default as Projects } from './sections/projects';
@@ -16,4 +17,9 @@ export { default as Leadership } from './sections/leadership';
 export { default as Learning } from './sections/learning';
 export { default as Github } from './sections/github';
 export { default as Contact } from './sections/contact';
-
+export { default as Background } from './background';
+export { default as Cursor } from './cursor';
+export { default as TargetCursor } from './TargetCursor';
+export { default as LightRays } from './LightRays';
+export { default as RippleGrid } from './RippleGrid';
+export { default as Hyperspeed } from './Hyperspeed';

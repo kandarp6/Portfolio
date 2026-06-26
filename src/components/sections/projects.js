@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useStaticQuery, graphql } from 'gatsby';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { srConfig } from '@config';
 import sr from '@utils/sr';
 import { Icon } from '@components/icons';
 import { usePrefersReducedMotion } from '@hooks';
+
+const rotate = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
 
 const StyledProjectsSection = styled.section`
   display: flex;
@@ -52,18 +57,23 @@ const StyledProject = styled.li`
     &:hover,
     &:focus-within {
       .project-inner {
-        transform: translateY(-7px);
+        transform: translateY(-8px);
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px -10px rgba(255, 255, 255, 0.1);
+        
+        &::before {
+          opacity: 1;
+        }
       }
     }
   }
 
   a {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
   .project-inner {
-    ${({ theme }) => theme.mixins.boxShadow};
     ${({ theme }) => theme.mixins.flexBetween};
     flex-direction: column;
     align-items: flex-start;
@@ -71,9 +81,49 @@ const StyledProject = styled.li`
     height: 100%;
     padding: 2rem 1.75rem;
     border-radius: var(--border-radius);
-    background-color: var(--light-navy);
+    background-color: rgba(8, 8, 10, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     transition: var(--transition);
-    overflow: auto;
+    overflow: hidden;
+    z-index: 1;
+
+    & > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -150%;
+      left: -150%;
+      width: 400%;
+      height: 400%;
+      background: conic-gradient(
+        transparent,
+        rgba(255, 255, 255, 0.3) 10%,
+        transparent 30%
+      );
+      animation: ${rotate} 5s linear infinite;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      right: 1px;
+      bottom: 1px;
+      background-color: rgba(8, 8, 10, 0.95);
+      backdrop-filter: blur(12px);
+      border-radius: calc(var(--border-radius) - 1px);
+      z-index: -1;
+      pointer-events: none;
+    }
   }
 
   .project-top {

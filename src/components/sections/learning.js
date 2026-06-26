@@ -16,8 +16,9 @@ const StyledLearningGrid = styled.div`
 `;
 
 const StyledLearningCard = styled.div`
-  background-color: var(--light-navy);
-  border: 1px solid var(--lightest-navy);
+  background-color: rgba(10, 10, 12, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   padding: 20px;
   border-radius: var(--border-radius);
   transition: var(--transition);
@@ -37,9 +38,9 @@ const StyledLearningCard = styled.div`
   }
 
   &:hover {
-    border-color: var(--green);
+    border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px -15px var(--navy-shadow);
+    box-shadow: 0 10px 30px -10px rgba(255, 255, 255, 0.1);
   }
 `;
 

@@ -2,20 +2,27 @@ import { css } from 'styled-components';
 
 const variables = css`
   :root {
-    --dark-navy: #030712;
-    --navy: #0b0f19;
-    --light-navy: #111827;
-    --lightest-navy: #1f2937;
-    --navy-shadow: rgba(3, 7, 18, 0.7);
-    --dark-slate: #4b5563;
-    --slate: #9ca3af;
-    --light-slate: #d1d5db;
-    --lightest-slate: #f3f4f6;
+    --dark-navy: #050505;
+    --navy: #050505;
+    --light-navy: #0a0a0c;
+    --lightest-navy: #151518;
+    --navy-shadow: rgba(0, 0, 0, 0.95);
+    --dark-slate: #52525b;
+    --slate: #a1a1aa;
+    --light-slate: #e4e4e7;
+    --lightest-slate: #f4f4f5;
+    --bg-glass: rgba(255, 255, 255, 0.03);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --shadow-premium: 0 12px 40px rgba(0, 0, 0, 0.45);
+    --shadow-bevel: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
     --white: #ffffff;
-    --green: #06b6d4;
-    --green-tint: rgba(6, 182, 212, 0.15);
-    --pink: #8b5cf6;
-    --blue: #3b82f6;
+    --green: #ffffff;
+    --green-tint: rgba(255, 255, 255, 0.08);
+    --pink: #a1a1aa;
+    --blue: #d4d4d8;
+    --neon-cyan: #ffffff;
+    --neon-purple: #3f3f46;
+    --accent-gradient: linear-gradient(135deg, #ffffff 0%, #71717a 100%);
 
     --font-sans: 'Calibre', 'Inter', 'San Francisco', 'SF Pro Text', -apple-system, system-ui,
       sans-serif;

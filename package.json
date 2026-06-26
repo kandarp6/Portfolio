@@ -13,11 +13,11 @@
   "license": "MIT",
   "browserslist": "> 0.25%, not dead",
   "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider&& gatsby build",
+    "develop": "set NODE_OPTIONS=--openssl-legacy-provider&& gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
-    "serve": "gatsby serve",
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider&& gatsby serve -p 8000",
     "clean": "gatsby clean",
     "prepare": "husky install",
     "lint-staged": "lint-staged"
@@ -50,7 +50,11 @@
     "gatsby-source-filesystem": "^3.4.0",
     "gatsby-transformer-remark": "^4.1.0",
     "gatsby-transformer-sharp": "^3.4.0",
+    "graphql": "^15.5.0",
+    "gsap": "^3.15.0",
     "lodash": "^4.17.19",
+    "ogl": "^1.0.11",
+    "postprocessing": "^6.30.0",
     "prismjs": "^1.27.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -58,7 +62,8 @@
     "react-helmet": "^6.1.0",
     "react-transition-group": "^4.3.0",
     "scrollreveal": "^4.0.5",
-    "styled-components": "^5.3.0"
+    "styled-components": "^5.3.0",
+    "three": "^0.149.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",

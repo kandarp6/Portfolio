@@ -4,7 +4,7 @@ title: 'Data Analytics & Data Science Intern'
 company: 'Graphura India Private Limited'
 location: 'Gujarat, India'
 range: 'May 2026 - Present'
-url: 'https://graphura.com'
+url: 'https://graphura.in'
 ---
 
 - Work with real-world datasets to perform analysis and generate business insights
