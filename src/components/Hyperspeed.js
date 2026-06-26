@@ -47,29 +47,7 @@ const DEFAULT_EFFECT_OPTIONS = {
 const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
   const hyperspeed = useRef(null);
   const appRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const observerRef = useRef(null);
-
-  useEffect(() => {
-    if (!hyperspeed.current) return;
-
-    observerRef.current = new IntersectionObserver(
-      entries => {
-        const entry = entries[0];
-        setIsVisible(entry.isIntersecting);
-      },
-      { threshold: 0.01 }
-    );
-
-    observerRef.current.observe(hyperspeed.current);
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
-      }
-    };
-  }, []);
+  const isVisible = true;
 
   useEffect(() => {
     if (!isVisible || !hyperspeed.current) {
@@ -1181,7 +1159,7 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
         appRef.current = null;
       }
     };
-  }, [isVisible, effectOptions]);
+  }, [effectOptions]);
 
   return <div id="lights" ref={hyperspeed}></div>;
 };
